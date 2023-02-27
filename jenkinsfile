@@ -1,5 +1,4 @@
 node{
-options { timestamps () }
 echo "Build Number is: ${env.BUILD_NUMBER}"
 echo "Build ID is: ${env.BUILD_ID}"
 echo "Build Job Name is: ${env.JOB_NAME}"
