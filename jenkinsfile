@@ -3,7 +3,7 @@ echo "Build Number is: ${env.BUILD_NUMBER}"
 echo "Build ID is: ${env.BUILD_ID}"
 echo "Build Job Name is: ${env.JOB_NAME}"
 echo "Jenkins Home is: ${env.JENKINS_HOME}"
-
+timestamps{
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), pipelineTriggers([pollSCM('* * * * *')])])
 	
 	def mavenHome = tool name: "maven3.9.0"
@@ -26,6 +26,7 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKe
 		}
 		stage('DeployAppIntoTomcatServer'){
 			deploy adapters: [tomcat9(credentialsId: '139bf02f-f6d2-4e28-ad4d-df38df249a7a', path: '', url: 'http://3.15.195.151:8080/')], contextPath: null, war: '**/*maven-web-application.war'
+		}
 		}
 	}
 
