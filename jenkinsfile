@@ -15,9 +15,7 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKe
 		git branch: 'development', credentialsId: '0471c15d-311b-4aa4-a1d0-f4514560ca4a', url: 'https://github.com/rnvishnu/maven-web-application.git'
 		}
 		stage('Build') {
-    		timestamp {
 		sh "${mavenHome}/bin/mvn clean package"
-		}
 		}
 
 		stage('ExecuteSonarQubeReport'){
