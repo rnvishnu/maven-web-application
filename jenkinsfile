@@ -41,7 +41,7 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKe
 
 //Send Slack Notificatons
 
-def sendSlackNotifications(String buildStatus = 'STARTED') {
+def sendSlackNotifications(String buildStatus = 'START') {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESS'
 
@@ -52,7 +52,7 @@ def sendSlackNotifications(String buildStatus = 'STARTED') {
   def summary = "${subject} (${env.BUILD_URL})"
 
   // Override default values based on build status
-  if (buildStatus == 'STARTED') {
+  if (buildStatus == 'START') {
     colorName = 'YELLOW'
     colorCode = '#FFFF00'
   } else if (buildStatus == 'SUCCESS') {
