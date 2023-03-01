@@ -33,26 +33,25 @@ pipeline{
 				sh "mvn clean package"
 			}
 		}
-		/*
+	
 		//Execute SonarQube Report
 		stage('ExecuteSonarQubeReport'){
-			steps{
-				sh "mvn clean sonar:sonar"
-			}
-		}
+		//	steps{
+		//		sh "mvn clean sonar:sonar"
+		//	}
+		//}
 		//UploadArtifacts Into Nexus Repo
-		stage('UploadArtifactsIntoNexus'){
-			steps{
-				sh "mvn clean deploy"
-			}
-		}
+		//stage('UploadArtifactsIntoNexus'){
+		//	steps{
+		//		sh "mvn clean deploy"
+		//	}
+		//}
 		//Deploy Application Into Tomcat Server
-		stage('DeployAppIntoTomcat'){
-		    steps{
-		      deploy adapters: [tomcat9(credentialsId: '139bf02f-f6d2-4e28-ad4d-df38df249a7a', path: '', url: 'http://3.128.204.156:8080/')], contextPath: null, war: '**/*maven-web-application.war'
-		}
-	*/
-	}
+		//stage('DeployAppIntoTomcat'){
+		  //  steps{
+		    //  deploy adapters: [tomcat9(credentialsId: '139bf02f-f6d2-4e28-ad4d-df38df249a7a', path: '', url: 'http://3.128.204.156:8080/')], contextPath: null, war: '**/*maven-web-application.war'
+		//}
+	//}
 }//stages close
 
 post {
