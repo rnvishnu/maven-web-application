@@ -1,46 +1,48 @@
-node{
-echo "Build Number is: ${env.BUILD_NUMBER}"
-echo "Build ID is: ${env.BUILD_ID}"
-echo "Build Job Name is: ${env.JOB_NAME}"
-echo "Jenkins Home is: ${env.JENKINS_HOME}"
-
-properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), pipelineTriggers([pollSCM('* * * * *')])])
+//pipleline 
+pipeline{
+    
+	agent any
 	
-	def mavenHome = tool name: "maven3.9.0"
+	tools {
+	    maven 'maven3.9.0'
+	    
+	}
 	
-	try
-	{
-		stage('Checkout Code'){
-		sendSlackNotifications('START')
-		git branch: 'development', credentialsId: '0471c15d-311b-4aa4-a1d0-f4514560ca4a', url: 'https://github.com/rnvishnu/maven-web-application.git'
-		}
-		stage('Build') {
-		sh "${mavenHome}/bin/mvn clean package"
-		}
-
-		stage('ExecuteSonarQubeReport'){
-		sh "${mavenHome}/bin/mvn clean sonar:sonar"
-		}
-		stage('UploadArtifactIntoNexus'){
-			sh "${mavenHome}/bin/mvn clean deploy"
-		}
-		stage('DeployAppIntoTomcatServer'){
-			deploy adapters: [tomcat9(credentialsId: '139bf02f-f6d2-4e28-ad4d-df38df249a7a', path: '', url: 'http://3.128.204.156:8080/')], contextPath: null, war: '**/*maven-web-application.war'
-		}
+	options {
+	    timestamps()
+	    buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+	    
 	}
 
-	catch(e){
-	currentBuild.result = "FAILED"
-	throw e
-	}
-	finally{
-	sendSlackNotifications(currentBuild.result)
-	}	
+	stages{
+		//checkout code stage
+		stage('checkoutcode'){
+			steps{
+			    sendSlackNotifications('START')
+				git branch: 'development', credentialsId: '0471c15d-311b-4aa4-a1d0-f4514560ca4a', url: 'https://github.com/rnvishnu/maven-web-application.git'
+			
+			}
+		}
+		//Build Stage
+		stage('Build'){
+			steps{
+				sh "mvn clean package"
+			}
+		}
+		
+}//stages close
 
+post {
+  success {
+    sendSlackNotifications(currentBuild.result)
+  }
+  failure {
+    sendSlackNotifications(currentBuild.result)
+  }
 }
 
-//Send Slack Notificatons
-
+}//Pipeline close
+//sendSlackNotifications to #devopsjenkinsnotification
 def sendSlackNotifications(String buildStatus = 'START') {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESS'
