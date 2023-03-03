@@ -28,6 +28,13 @@ pipeline{
 			}
 		}
 		
+		//Execute SonarQube Report
+		stage('ExecuteSonarQubeReport'){
+			steps{
+				sh "mvn clean sonar:sonar"
+			}
+		}
+		
 }//stages close
 
 post {
