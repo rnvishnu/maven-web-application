@@ -1,7 +1,9 @@
 //pipleline 
 pipeline{
     
-	agent any
+	agent {
+		label 'Built-In Node'
+	}
 	
 	tools {
 	    maven 'maven3.9.0'
